@@ -20,8 +20,27 @@ const tools = [
 
 export async function GET() {
   return NextResponse.json({
-    name: "JA Property MCP",
-    version: "1.0.0",
+    schema_version: "v1",
+
+    name_for_human: "JA Property MCP",
+
+    name_for_model: "ja_property_mcp",
+
+    description_for_human:
+      "Search Jamaican real estate listings",
+
+    description_for_model:
+      "Tool for searching Jamaican properties by parish and budget",
+
+    auth: {
+      type: "none"
+    },
+
+    api: {
+      type: "openapi",
+      url: "https://ja-property-mcp.vercel.app/api/openapi.json"
+    },
+
     tools
   });
 }
