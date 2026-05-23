@@ -1,17 +1,36 @@
 import { NextResponse } from "next/server";
 
+interface SearchRequest {
+  parish?: string;
+  budget?: number;
+}
+
+const PROPERTIES = [
+  { title: "Kingston Apartment", parish: "Kingston", price: 12000000 },
+  { title: "Montego Bay Villa", parish: "St James", price: 18000000 }
+];
+
 export async function POST(req: Request) {
-  const body = await req.json();
+  try {
+    const body: SearchRequest = await req.json();
 
-  const properties = [
-    { title: "Kingston Apartment", parish: "Kingston", price: 12000000 },
-    { title: "Montego Bay Villa", parish: "St James", price: 18000000 }
-  ];
+    const searchParish = body.parish?.toLowerCase().trim();
+    const searchBudget = body.budget;
 
-  const filtered = properties.filter(p =>
-    (!body.parish || p.parish === body.parish) &&
-    (!body.budget || p.price <= body.budget)
-  );
+    const filtered = PROPERTIES.filter(p => {
+      const matchesParish = !searchParish || 
+        p.parish.toLowerCase().includes(searchParish);
+      const matchesBudget = !searchBudget || 
+        p.price <= searchBudget;
+        
+      return matchesParish && matchesBudget;
+    });
 
-  return NextResponse.json({ results: filtered });
+    return NextResponse.json({ results: filtered });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Invalid request body" },
+      { status: 400 }
+    );
+  }
 }

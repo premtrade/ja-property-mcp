@@ -1,0 +1,63 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Jamaica Property Search MCP",
+    "description": "An MCP-style tool for searching real estate properties in Jamaica by parish and budget.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://your-deployed-app.vercel.app",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/api/tool/search_properties": {
+      "post": {
+        "operationId": "searchProperties",
+        "summary": "Search for Jamaican properties",
+        "description": "Filters a database of Jamaican properties based on geographic parish and maximum price.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parish": {
+                    "type": "string",
+                    "description": "The name of the parish (e.g., Kingston, St James, St Catherine)."
+                  },
+                  "budget": {
+                    "type": "number",
+                    "description": "The maximum price in JMD."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A JSON object containing an array of property results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
